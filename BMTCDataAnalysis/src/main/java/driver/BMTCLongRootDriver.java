@@ -3,7 +3,6 @@ package driver;
 import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.FloatWritable;
-import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.CombineTextInputFormat;
@@ -12,7 +11,6 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 
-import CustomData.CustomValue;
 import mapper.LongRootMapper;
 import reducer.LongRootReducer;
 
@@ -31,10 +29,14 @@ public class BMTCLongRootDriver extends Configured implements Tool {
 		job.setInputFormatClass(CombineTextInputFormat.class);
 		
 		job.setMapperClass(LongRootMapper.class);
-		job.setMapOutputKeyClass(NullWritable.class);
-		job.setMapOutputValueClass(CustomValue.class);
+		//job.setMapOutputKeyClass(NullWritable.class);
+		//job.setMapOutputValueClass(CustomValue.class);
+		
+		job.setMapOutputKeyClass(Text.class);
+		job.setMapOutputValueClass(FloatWritable.class);
 		
 		job.setReducerClass(LongRootReducer.class);
+		//job.setReducerClass(Reducer.class);
 		job.setOutputKeyClass(Text.class);
 		job.setOutputValueClass(FloatWritable.class);
 		

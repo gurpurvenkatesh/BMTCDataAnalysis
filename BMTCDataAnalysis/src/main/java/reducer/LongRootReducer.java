@@ -3,29 +3,21 @@ package reducer;
 import java.io.IOException;
 
 import org.apache.hadoop.io.FloatWritable;
-import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Reducer;
 
-import CustomData.CustomValue;
+public class LongRootReducer extends Reducer<Text, FloatWritable, Text, FloatWritable> {
 
-public class LongRootReducer extends Reducer<NullWritable, CustomValue, Text, FloatWritable> {
-
-	public void reduce(Text key, Iterable<CustomValue> values, Context context) throws IOException, InterruptedException{
+	public void reduce(Text key, Iterable<FloatWritable> values, Context context) throws IOException, InterruptedException{
 
 		float result = (float) 0.0;
-		CustomValue resultValue = new CustomValue();
 		
-		for(CustomValue value : values){
+		for(FloatWritable value : values){
 			
-			if (result <  value.getDistance().get()){
-				result =  value.getDistance().get();
-				resultValue.setDistance(value.getDistance());
-				resultValue.setRoute_no(value.getRoute_no());
-			}
-								
+			if (result < value.get())
+				result =  value.get();								
 		}		
-		context.write(resultValue.getRoute_no(), resultValue.getDistance());
+		context.write(key, new FloatWritable(result));
 
 	}
 }

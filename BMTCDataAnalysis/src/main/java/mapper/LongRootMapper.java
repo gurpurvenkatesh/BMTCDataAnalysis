@@ -11,7 +11,7 @@ import org.apache.hadoop.mapreduce.Mapper;
 import CustomData.CustomValue;
 import store.BMTCRouteStoreParser;
 
-public class LongRootMapper extends Mapper<LongWritable, Text, NullWritable, CustomValue> {
+public class LongRootMapper extends Mapper<LongWritable, Text, Text, FloatWritable> {
 
 	private BMTCRouteStoreParser bmtcParser = new BMTCRouteStoreParser();
 	private CustomValue customValue = new CustomValue();
@@ -19,9 +19,9 @@ public class LongRootMapper extends Mapper<LongWritable, Text, NullWritable, Cus
 	public void map(LongWritable LineOffset, Text record, Context context) throws IOException, InterruptedException{
 		
 		bmtcParser.parser(record.toString());	
-		customValue.setRoute_no(bmtcParser.getRoute_no());
-		customValue.setDistance(bmtcParser.getDistance());
+		//customValue.setRoute_no(new Text(bmtcParser.getRoute_no()));
+		//customValue.setDistance(new FloatWritable(bmtcParser.getDistance()));
 		
-		context.write(NullWritable.get(), customValue);		
+		context.write(new Text(bmtcParser.getRoute_no()), new FloatWritable(bmtcParser.getDistance()));		
 	}
 }
